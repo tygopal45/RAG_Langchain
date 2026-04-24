@@ -10,6 +10,10 @@ loader = DirectoryLoader(
 
 docs = loader.load()
 
+# LAZY_LOAD
+
+docs1 = loader.lazy_load()
+
 print(len(docs))
 # sum of total pages in all the PDF files in the directory
 
@@ -18,3 +22,7 @@ print(docs[0].metadata)
 
 print(docs[325].page_content)
 print(docs[325].metadata)
+
+# Why is lazy_load faster ?
+# lazy_load is faster because it does not load the entire content of the files into memory at once. 
+# It loads the content of the files on demand, which means that it only loads the content of the files when it is needed. 
