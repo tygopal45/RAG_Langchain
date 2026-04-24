@@ -13,3 +13,4 @@ transformers<4.46.0
 pydantic
 
 python-dotenv
+PyPDF
