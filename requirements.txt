@@ -2,11 +2,13 @@ langchain
 langchain-core
 langchain-community
 langchain-experimental
+langchain-chroma
+langchain-text-splitters
 
 langchain-google-genai
 google-generativeai
 
-langchain-huggingface
+langchain-huggingfacece
 huggingface-hub
 
 transformers<4.46.0
@@ -16,3 +18,5 @@ pydantic
 python-dotenv
 PyPDF
 beautifulsoup4
+
+chromadb
