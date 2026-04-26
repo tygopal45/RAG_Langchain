@@ -40,7 +40,7 @@ vector_store = Chroma(
     collection_name='sample'
 )
 
-# uuids = vector_store.add_documents(docs)
+uuids = vector_store.add_documents(docs)
 
 
 # to see the metadata, documents and embeddings stored in the vector store
@@ -48,12 +48,13 @@ met = vector_store.get(include=["embeddings", "metadatas", "documents"])
 print(f"\nMetadata: {met['metadatas']}")
 print(f"\nDocuments: {met['documents']}")
 print(f"\nEmbeddings: {met['embeddings']}")
+print(f"\nIDs: {met['ids']}")
 
 
+# add
+print(f"Added {len(uuids)} documents to the vector store.")
 
-# print(f"Added {len(uuids)} documents to the vector store.")
-
-
+# search
 # similarity search
 query = "Who is the captain of Mumbai Indians?"
 results = vector_store.similarity_search(query=query, k=1)
@@ -74,7 +75,7 @@ print(results_bow)
 
 print(results_score)
 
-
+# filter
 # metadata filtering
 
 res = vector_store.similarity_search_with_score(
@@ -82,3 +83,32 @@ res = vector_store.similarity_search_with_score(
     filter={"team": "Mumbai Indians"}
 )
 print(res)
+
+
+# update
+target_id = uuids[0] 
+
+updated_doc1 = Document(
+    page_content="Virat Kohli is the former captain of Royal Challengers Bangalore in IPL.",
+    metadata={"team": "Royal Challengers Bangalore"}
+)
+
+# 2. Use the dynamic ID instead of a hardcoded string
+vector_store.update_document(
+    document_id=target_id, 
+    document=updated_doc1
+)
+
+# 3. Verify the change
+met = vector_store.get(include=["embeddings", "metadatas", "documents"])
+print("\n--- Updated Data ---")
+print(f"Metadata: {met['metadatas']}")
+print(f"Documents: {met['documents']}")
+
+
+# delete
+vector_store.delete(ids=[uuids[0]])  # Deleting the second document
+met = vector_store.get(include=["embeddings", "metadatas", "documents"])
+print("\n--- Deleted Data ---")
+print(f"Metadata: {met['metadatas']}")
+print(f"Documents: {met['documents']}")
