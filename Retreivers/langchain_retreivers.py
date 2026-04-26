@@ -9,15 +9,12 @@ from langchain_classic.retrievers.multi_query import MultiQueryRetriever
 from langchain_classic.retrievers.contextual_compression import ContextualCompressionRetriever
 from langchain_classic.retrievers.document_compressors.chain_extract import LLMChainExtractor
 
-# Load environment variables from .env
 load_dotenv()
 
-# Initialize Gemini Models
-# Using gemini-1.5-flash for speed/cost, or gemini-1.5-pro for complex reasoning
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro")
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
-"""## 1. Wikipedia Retriever"""
+# 1. Wikipedia Retriever
 retriever = WikipediaRetriever(top_k_results=2, lang="en", wiki_client="wikipedia")
 query_wiki = "the geopolitical history of india and pakistan"
 docs_wiki = retriever.invoke(query_wiki)
@@ -26,7 +23,9 @@ print("\n--- Wikipedia Results ---")
 for i, doc in enumerate(docs_wiki):
     print(f"Result {i+1}: {doc.page_content[:200]}...")
 
-"""## 2. Vector Store Retriever (Chroma)"""
+
+
+# 2. Vector Store Retriever (Chroma)
 source_docs = [
     Document(page_content="LangChain helps developers build LLM applications easily."),
     Document(page_content="Chroma is a vector database optimized for LLM-based search."),
@@ -40,6 +39,8 @@ vectorstore_chroma = Chroma.from_documents(
     collection_name="gemini_collection"
 )
 
+
+# I can make retreiver with the help of vector store
 chroma_retriever = vectorstore_chroma.as_retriever(search_kwargs={"k": 2})
 results_chroma = chroma_retriever.invoke("What is Chroma used for?")
 
@@ -48,7 +49,8 @@ for doc in results_chroma:
     print(f"- {doc.page_content}")
 
 
-"""## 3. MMR (Maximum Marginal Relevance)"""
+
+# 3. MMR (Maximum Marginal Relevance)
 mmr_docs = [
     Document(page_content="LangChain makes it easy to work with LLMs."),
     Document(page_content="LangChain is used to build LLM based applications."),
