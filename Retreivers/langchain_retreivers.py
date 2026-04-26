@@ -62,8 +62,8 @@ mmr_docs = [
 vectorstore_faiss = FAISS.from_documents(documents=mmr_docs, embedding=embeddings)
 
 mmr_retriever = vectorstore_faiss.as_retriever(
-    search_type="mmr",
-    search_kwargs={"k": 3, "lambda_mult": 0.5}
+    search_type="mmr", # telling search type MMR
+    search_kwargs={"k": 3, "lambda_mult": 0.5} # lambda_mult - controls the diversity of results (1 means normal search, 0 diversity)
 )
 
 print("\n--- MMR Diverse Results ---")
@@ -71,7 +71,7 @@ for doc in mmr_retriever.invoke("What is langchain?"):
     print(f"- {doc.page_content}")
 
 
-"""## 4. MultiQuery Retriever"""
+# 4. MultiQuery Retriever
 health_docs = [
     Document(page_content="Regular walking boosts heart health.", metadata={"source": "H1"}),
     Document(page_content="Deep sleep is crucial for cellular repair.", metadata={"source": "H3"}),
@@ -88,11 +88,14 @@ multiquery_retriever = MultiQueryRetriever.from_llm(
 
 print("\n--- MultiQuery Results ---")
 mq_results = multiquery_retriever.invoke("How to maintain energy balance?")
+
 for doc in mq_results:
     print(f"- {doc.page_content}")
 
 
-"""## 5. Contextual Compression"""
+
+
+# 5. Contextual Compression Retriever
 comp_docs = [
     Document(page_content="The Grand Canyon is a natural wonder. Photosynthesis is how plants get energy. Tourists visit it yearly."),
     Document(page_content="Castles were built for defense. Chlorophyll captures sunlight for photosynthesis. Knights wore armor."),
